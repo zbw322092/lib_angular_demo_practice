@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <script>
+  console.log(Object);
+  console.log(Object.prototype);
+  console.log(Object.prototype.hasOwnProperty);
+  console.log(Object.create);
+
+  console.log(Function);
+  console.log(Function.prototype);
+  console.log(Function.prototype.name);
+
+  console.log(Array);
+  console.log(Array.prototype);
+  console.log(Array.prototype.indexOf);
+
+  var o = {
+    a: 1,
+    b: 2
+  }
+  console.log(o);
+  console.log(o.prototype); // undefined
+  console.log(o.constructor); // function Object() { [native code] }
+  // console.log(o.prototype.hasOwnProperty);
+
+
+  // -------------------------------------------------
+  console.log(typeof null); // object
+  console.log(typeof undefined); // undefined
+
+  console.log(typeof window); // object
+
+
+
+
+
+
+  // -------------------------------------------------
+
+  function extend() {
+    var ObjProto = Object.prototype;
+    var hasOwnProperty = ObjProto.hasOwnProperty;
+    var nativeCreate = Object.create;
+    var Ctor = function() {};
+
+    var has = function(obj, key) {
+      return obj != null && hasOwnProperty.call(obj, key);
+    };
+    // Is a given variable an object?
+    var isObject = function(obj) {
+      var type = typeof obj;
+      return type === 'function' || type === 'object' && !!obj;
+    };
+
+    // An internal function for creating a new object that inherits from another.
+    var baseCreate = function(prototype) {
+      if (!isObject(prototype)) return {};
+      if (nativeCreate) return nativeCreate(prototype);
+      Ctor.prototype = prototype;
+      var result = new Ctor;
+      Ctor.prototype = null;
+      return result;
+    };
+
+    var create = function(prototype, props) {
+      var result = baseCreate(prototype);
+      if (props) angular.extend(result, props);
+      return result;
+    };
+
+    // Helper function to correctly set up the prototype chain for subclasses.
+    // Similar to `goog.inherits`, but uses a hash of prototype properties and
+    // class properties to be extended.
+    var extend = function(protoProps, staticProps) {
+      var parent = this;
+      var child;
+
+      // The constructor function for the new subclass is either defined by you
+      // (the "constructor" property in your `extend` definition), or defaulted
+      // by us to simply call the parent constructor.
+      if (protoProps && has(protoProps, 'constructor')) {
+        child = protoProps.constructor;
+      } else {
+        child = function() {
+          return parent.apply(this, arguments);
+        };
+      }
+
+      // Add static properties to the constructor function, if supplied.
+      angular.extend(child, parent, staticProps);
+
+      // Set the prototype chain to inherit from `parent`, without calling
+      // `parent`'s constructor function and add the prototype properties.
+      child.prototype = create(parent.prototype, protoProps);
+      child.prototype.constructor = child;
+
+      // Set a convenience property in case the parent's prototype is needed
+      // later.
+      child.__super__ = parent.prototype;
+
+      return child;
+    };
+
+    return extend;
+  }
+
+  var t = new Object({
+  	a: 1,
+  	b: 2
+  });
+
+  console.log(t);
+  console.log(typeof t); // object
+
+  console.log(t.constructor); // function Object() { [native code] }
+  console.log(t.prototype); // undefined
+  console.log(t.constructor.prototype); // 和Object.prototype一个结果
+
+
+  var T = function() {
+  	return "ok";
+  }
+
+  T.prototype = {
+  	addItem: function(key, value) {
+  		return T.key = value;
+  	},
+  	changeItems: function(name, value) {
+  		return T.name + value;
+  	}
+  }
+
+  var tt = new T;
+  
+  console.log(tt);
+  console.log(tt.hasOwnProperty('addItem')); // false
+
+  console.log(T.addItem); // undefined
+	console.log(T.hasOwnProperty('addItem')); // false
+	console.log(T.prototype.hasOwnProperty('addItem')); // true
+	console.log(T.prototype);
+
+	// 如果在循环体内加了return，报错Uncaught SyntaxError: Illegal return statement, 因为return
+	// 是针对函数的，在循环体内使用return则会报错
+	// 在for in loop当中，p指代的是key
+	for (p in T.prototype) {
+		console.log(p + ' ' + T.prototype[p]);
+	}
+
+
+	var ObjProto = Object.prototype;
+	var hasOwnProperty = ObjProto.hasOwnProperty;
+
+	function has(obj, key) {
+		return hasOwnProperty.call(obj, key);
+	}
+
+	console.log(has(T, 'addItem')); // false
+	
+	Object.prototype.name = function(a) {
+		return a;
+	}
+
+	console.log(Object.prototype);
+
+	console.log(has(this, "name")); // true
+	console.log(has(this, "toString")); // false
+	console.log(has(this, "hasOwnProperty")); // true
+
+	// 注意以下的实参中传入的虽然不是object，但是不会报错
+	console.log(has(111, "name")); // false
+	console.log(has("It is a string", "name")); // false
+	console.log(has(true, "name")); // false
+
+	// 然而，如果传入undefined或者null，会报错:
+	// Uncaught TypeError: Cannot convert undefined or null to object.
+	// console.log(has(undefined, "name"));
+	// console.log(has(null, "name"));
+
+	console.log(!null); // true
+	console.log(!!null); // true
+
+	console.log(null == undefined); // true
+	console.log(null === undefined); // false
+
+	// 为了防止上面错误的发生，我们可以改造has函数，对传入的实参进行一个过滤
+	function hasUpgrade(obj, key) {
+		return obj != null && hasOwnProperty.call(obj, key);
+	}
+
+	// 现在再传入undefined或者null就不会报错，只会显示false
+	console.log(hasUpgrade(undefined, "name")); // false
+	console.log(hasUpgrade(null, "name")); // false
+
+
+
+
+	
+
+
+
+
+  // -------------------------------------------------
+
+
+
+
+
+  </script>
+</body>
+
+</html>
+
+
+
+
