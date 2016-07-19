@@ -282,6 +282,30 @@
 
 
 
+	// console.log(null.constructor); // Uncaught TypeError: Cannot read property 'constructor' of null
+	// console.log(undefined.constructor); // Uncaught TypeError: Cannot read property 'constructor' of undefined
+	console.log({}.constructor); // function Object() { [native code] }
+	console.log('111'.constructor); // function String() { [native code] }
+	console.log(function(){}.constructor); // function Function() { [native code] }
+
+	// console.log(111.constructor); // Uncaught SyntaxError: Unexpected token ILLEGAL
+	var n = new Number(111);
+	console.log(n);
+	console.log(n === 111); // false
+	console.log(n == 111); // true
+	console.log(n - 111); // 0
+	console.log(typeof n); // object
+	console.log(typeof 111); // number
+
+
+
+	// function extendTesting(protoProps, staticProps) {
+	// 	var parent = this,
+	// 	child;
+
+
+	// }
+	
 
 
   // -------------------------------------------------
