@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 <body>
+	<p id="demo"></p>
+	<button onclick="showOwnerDocument()">ownerDocument</button>
+
+	<p id="demo2"></p>
+	<button onclick="showDocumentElement()">documentElement</button>
+
 	<script>
 		function isWindow(obj) {
 			return obj != null && obj === obj.window;
@@ -18,6 +24,28 @@
 		console.log(o.self); // undefined
 
 		
+		function showOwnerDocument() {
+			var x = document.getElementById("demo");
+			x.innerHTML = x.ownerDocument.nodeType + ' ' + x.ownerDocument;
+			console.log(x.ownerDocument);
+			console.log(x.ownerDocument.documentElement);
+		}
+
+		function showDocumentElement() {
+			var x = document.documentElement.nodeName + ' ' + document.documentElement;
+			document.getElementById("demo2").innerHTML = x;
+			console.log(document.documentElement);
+		}
+
+
+
+		// defaultView
+		console.log(document.defaultView); // 返回了window object
+
+		console.log(document.getElementById("demo").defaultView); // undefined
+
+		
+
 
 
 	</script>
