@@ -2,6 +2,7 @@
 <html>
 
 <body>
+  <script type="text/javascript" src="../Scripts/angular.js"></script>
   <script>
   console.log(Object);
   console.log(Object.prototype);
@@ -212,8 +213,72 @@
 
 
 
+	var nativeCreate = Object.create;
+	var Ctor = function() {};
+
+	function baseCreate(prototype) {
+		if (!isObject) return {};
+		// 检查是否有Object.create方法存在
+		if (nativeCreate) return nativeCreate(prototype);
+		Ctor.prototype = prototype;
+		var result = new Ctor;
+		Ctor.prototype = null;
+		return result;
+	}
+
+	var r =	baseCreate({
+		add: function(a,b) {
+			return a + b;
+		},
+		subtract: function(a,b) {
+			return a - b;
+		}
+	});
+	console.log(r);
+
+	// angular.extend() testing
+	console.log(o);
+	console.log(angular.extend(o, {c:3}));
+	console.log(angular.extend(o, null)); // 没有变化
+	console.log(angular.extend(o, undefined)); // 没有变化
+	console.log(angular.extend(o, 111)); // 没变化
+	console.log(angular.extend(o, "string")); // 将"string"每个字母拆成
+	//一个value，并分配相应的key,存入目标object中
 	
 
+	function create(prototype, props) {
+		var result = baseCreate(prototype);
+		if(props) angular.extend(result, props);
+		return result;
+	}
+
+	var rr = create({
+		add: function(a,b) {
+			return a + b;
+		},
+		subtract: function(a,b) {
+			return a - b;
+		}
+	}, {
+		multiply: function(a, b) {
+			return a*b;
+		},
+		divided: function(a, b) {
+			return a/b;
+		}
+	});
+	console.log(rr);
+
+
+	var rrr = create({
+		add: function(a,b) {
+			return a + b;
+		},
+		subtract: function(a,b) {
+			return a - b;
+		}
+	}, "string");
+	console.log(rrr);
 
 
 
