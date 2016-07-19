@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<script>
+		function isWindow(obj) {
+			return obj != null && obj === obj.window;
+		}
+
+		var o = {
+			a: 1
+		};
+
+		console.log(isWindow(o)); // false
+		console.log(isWindow(window)); // true
+		console.log(o.window); // undefined
+		//console.log(null.window); // Uncaught TypeError: Cannot read property 'window' of null
+		console.log(window.window); // 返回了window object
+		console.log(o.self); // undefined
+
+		
+
+
+	</script>
+</body>
+</html>
