@@ -197,7 +197,24 @@
 
 
 
+	// 这个函数中将函数对象也归入object类，但是要排除null，因为它在typeof方法中结果也是object
+	function isObject(o) {
+		var type = typeof o;
+		return type === 'function' || type === 'object' && !!o;
+		// return type === 'function' || type === 'object' && o !== null;
+	}
+
+	console.log(isObject(111)); // false
+	console.log(isObject(function() {})); // true
+	console.log(isObject({})); // true
+	console.log(isObject(null)); // false
+	console.log(isObject(undefined)); // false
+
+
+
 	
+
+
 
 
 
