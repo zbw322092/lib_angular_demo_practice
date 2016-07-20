@@ -299,13 +299,38 @@
 
 
 
-	// function extendTesting(protoProps, staticProps) {
-	// 	var parent = this,
-	// 	child;
+	function extendTesting(protoProps, staticProps) {
+		var parent = this,
+		child;
+
+		if (protoProps && hasUpgrade(protoProps, 'constructor')) {
+			child = protoProps.constructor;
+		} else {
+			child = function() {
+				return parent.apply(this, arguments);
+			}
+		}
+
+		angular.extend(child, parent, staticProps);
+
+		child.prototype = create(parent.prototype, protoProps);
+		child.prototype.constructor = child;
+
+		child.__super__ = parent.prototype;
+
+		return child;
+	}
 
 
-	// }
-	
+	// constructor testing
+	function f() {};
+	var s = "String";
+	var n = 123;
+	console.log(f.constructor); // function Function() { [native code] }
+	console.log(s.constructor); // function String() { [native code] }
+	console.log(n.constructor); // function Number() { [native code] }
+
+	console.log(has(n, 'constructor')); // false
 
 
   // -------------------------------------------------
