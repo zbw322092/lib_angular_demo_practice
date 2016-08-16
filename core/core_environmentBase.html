@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <script type="text/javascript" src="../Scripts/angular.js"></script>
+  <script>
+  	console.log(this);
+  	console.log(this.constructor);
+  	console.log(this.constructor.__super__);
+
+  	function F() {
+
+  	};
+
+  	F.prototype = {
+  		add: function(a, b) {
+  			return a + b;
+  		}
+  	};
+
+  	var f = new F;
+
+  	console.log(f);
+  	console.log(f.__proto__);
+
+
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
